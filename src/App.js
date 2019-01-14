@@ -1,25 +1,39 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from "react";
+import logo from "./logo.svg";
+import "./App.css";
+import ToDoList from "./components/ToDoList";
 
-class App extends Component {
+type State = {
+  listItems: String[]
+};
+class App extends Component<{}, State> {
+  state = {
+    listItems: [
+      {
+        item: "one"
+      },
+      {
+        item: "two"
+      },
+      {
+        item: "three"
+      }
+    ]
+  };
+  addItem = () => {
+    this.setState(prevState => ({
+      listItems: [
+        ...prevState.listItems,
+        { item: `${prevState.listItems.length}` }
+      ]
+    }));
+  };
   render() {
+    const { listItems } = this.state;
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+        <button onClick={this.addItem} />
+        <ToDoList listItems={listItems} />
       </div>
     );
   }
