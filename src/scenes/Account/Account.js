@@ -2,14 +2,20 @@ import React, { PureComponent } from "react";
 import Modal from "../../components/Modal";
 import ToDoList from "../../components/ToDoList";
 
-export default class Account extends PureComponent {
+type State = {
+  listItems: String[],
+  show: boolean,
+  validation: boolean,
+  value: String
+};
+export default class Account extends PureComponent<{}, State> {
   state = {
     listItems: [],
     show: false,
     validation: false,
     value: ""
   };
-  toggleModal = (shouldShow) => {
+  toggleModal = shouldShow => {
     this.setState({ show: shouldShow, validation: false });
   };
   addItem = () => {

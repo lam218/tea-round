@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import Account from '../scenes/Account';
 //import TeaRound from '../scenes/TeaRound';
-//import Login from '../scenes/Login';
+import Login from '../scenes/Login';
 
 const BasicExample = () => {
     return (
@@ -22,7 +22,7 @@ const BasicExample = () => {
   
           <hr />
   
-          {/* <Route exact path="/" component={Login} /> */}
+          <Route exact path="/" component={Login} />
           <Route path="/account" component={Account} />
           {/* <Route path="/tearound" component={TeaRound} /> */}
         </div>

@@ -1,7 +1,13 @@
 import React from "react";
-import './Modal.scss';
+import "./Modal.scss";
 
-const Modal = ({ handleClose, show, children }) => {
+type Props = {
+  handleClose: () => void,
+  show: boolean,
+  children: React.ReactNode
+};
+
+const Modal = ({ handleClose, show, children }: Props) => {
   return (
     <div className={show ? "modal display-block" : "modal display-none"}>
       <section className="modal-main">
