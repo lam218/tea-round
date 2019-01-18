@@ -1,6 +1,8 @@
 import React, { PureComponent } from "react";
 import Modal from "../../components/Modal";
 import ToDoList from "../../components/ToDoList";
+import AddImage from '../../components/AddImage';
+import Details from '../../components/Details';
 
 type State = {
   listItems: String[],
@@ -41,6 +43,8 @@ export default class Account extends PureComponent<{}, State> {
     const { listItems, show, value, validation } = this.state;
     return (
       <div className="App">
+      <AddImage />
+      <Details user={{name: 'Lucy', preference: 'Tea'}}/>
         <button onClick={() => this.toggleModal(true)}>show</button>
         <Modal handleClose={() => this.toggleModal(false)} show={show}>
           <input onChange={this.typeValue} value={value} />
