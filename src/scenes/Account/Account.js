@@ -1,6 +1,8 @@
 import React, { PureComponent } from "react";
 import Modal from "../../components/Modal";
-import ToDoList from "../../components/ToDoList";
+import ToDoList from "../../containers/VisibleToDoList";
+import Footer from '../../components/Footer';
+import AddToDo from "../../containers/AddToDo";
 
 type State = {
   listItems: String[],
@@ -41,13 +43,15 @@ export default class Account extends PureComponent<{}, State> {
     const { listItems, show, value, validation } = this.state;
     return (
       <div className="App">
-        <button onClick={() => this.toggleModal(true)}>show</button>
-        <Modal handleClose={() => this.toggleModal(false)} show={show}>
+        {/* <button onClick={() => this.toggleModal(true)}>show</button> */}
+        <AddToDo validation={validation}/>
+        {/* <Modal handleClose={() => this.toggleModal(false)} show={show}>
           <input onChange={this.typeValue} value={value} />
-          {validation && <p>Uh oh! Looks like you haven't added a task</p>}
+          
           <button onClick={this.addItem}>add</button>
-        </Modal>
-        <ToDoList listItems={listItems} />
+        </Modal> */}
+        <ToDoList />
+        <Footer />
       </div>
     );
   }

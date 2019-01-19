@@ -2,10 +2,11 @@ import React from "react";
 import ToDoItem from "../ToDoItem";
 
 type Props = {
-  listItems: String[]
+  todos: String[],
+  toggleTodo: () => void
 };
 
-const ToDoList = (props: Props) => {
-  return props.listItems.map(item => <ToDoItem key={item.item} item={item.item} />);
+const ToDoList = ({todos, toggleTodo}: Props) => {
+  return todos && todos.map(item => <ToDoItem key={item.id} {...item} onClick={() => toggleTodo(item.id)}/>);
 };
 export default ToDoList;
