@@ -3,10 +3,15 @@ import ToDoItem from "../ToDoItem";
 
 type Props = {
   todos: String[],
-  toggleTodo: () => void
+  claimTodo: () => void
 };
 
-const ToDoList = ({todos, toggleTodo}: Props) => {
-  return todos && todos.map(item => <ToDoItem key={item.id} {...item} onClick={() => toggleTodo(item.id)}/>);
+const ToDoList = ({ todos, claimTodo }: Props) => {
+  return (
+    todos &&
+    todos.map(item => (
+      <ToDoItem key={item.id} {...item} onClick={() => claimTodo(item.id)} />
+    ))
+  );
 };
 export default ToDoList;

@@ -1,26 +1,29 @@
 import { connect } from "react-redux";
-import { toggleTodo, VisibilityFilters } from "../actions";
+import { claimTodo, VisibilityFilters } from "../actions";
 import TodoList from "../components/ToDoList";
 
-const getVisibleTodos = (todos, filter) => {
+const compare = (a: Object, b: Object) =>
+  a.completed < b.completed ? -1 : a.completed > b.completed ? 1 : 0;
+
+const getMostUsed = (todos, filter) => {
   switch (filter) {
-    case VisibilityFilters.SHOW_ALL:
+    case VisibilityFilters.ORDER_CREATED:
       return todos;
-    case VisibilityFilters.SHOW_COMPLETED:
-      return todos.filter(t => t.completed);
-    case VisibilityFilters.SHOW_ACTIVE:
-      return todos.filter(t => !t.completed);
+    case VisibilityFilters.LOWEST_FIRST:
+      return todos.sort(compare);
+    case VisibilityFilters.HIGHEST_FIRST:
+      return todos.sort(compare).reverse();
     default:
       throw new Error("Unknown filter: " + filter);
   }
 };
 
 const mapStateToProps = state => ({
-  todos: getVisibleTodos(state.todos, state.visibilityFilters)
+  todos: getMostUsed(state.todos, state.visibilityFilters)
 });
 
 const mapDispatchToProps = dispatch => ({
-  toggleTodo: id => dispatch(toggleTodo(id))
+  claimTodo: (id) => dispatch(claimTodo(id))
 });
 
 export default connect(

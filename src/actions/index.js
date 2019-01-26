@@ -9,13 +9,15 @@ export const setVisibilityFilter = filter => ({
   filter
 });
 
-export const toggleTodo = id => ({
-  type: "TOGGLE_TODO",
-  id
-});
+export const claimTodo = (id) => {
+  return {
+    type: "CLAIM_TODO",
+    id
+  };
+};
 
 export const VisibilityFilters = {
-  SHOW_ALL: "SHOW_ALL",
-  SHOW_COMPLETED: "SHOW_COMPLETED",
-  SHOW_ACTIVE: "SHOW_ACTIVE"
+  ORDER_CREATED: "ORDER_CREATED",
+  LOWEST_FIRST: "LOWEST_FIRST",
+  HIGHEST_FIRST: "HIGHEST_FIRST"
 };

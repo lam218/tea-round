@@ -3,18 +3,14 @@ import React from "react";
 type Props = {
   text: String,
   onClick: () => void,
-  completed: boolean
+  completed: number
 };
 
 const ToDoItem = ({ onClick, completed, text }: Props) => (
-  <p
-    onClick={onClick}
-    style={{
-      textDecoration: completed ? "line-through" : "none"
-    }}
-  >
-    {text}
-  </p>
+  <div>
+    <p onClick={onClick}>{text}</p>
+    <p>{completed}</p>
+  </div>
 );
 
 export default ToDoItem;
