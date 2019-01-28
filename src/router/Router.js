@@ -4,7 +4,7 @@ import Account from '../scenes/Account';
 //import TeaRound from '../scenes/TeaRound';
 import Login from '../scenes/Login';
 
-const BasicExample = () => {
+const Routes = () => {
     return (
       <Router>
         <div>
@@ -30,4 +30,4 @@ const BasicExample = () => {
     );
   }
 
-  export default BasicExample;
+  export default Routes;
