@@ -1,34 +1,16 @@
 import React, { PureComponent } from "react";
 import { Link } from "react-router-dom";
-import * as ROUTES from '../../constants/routes';
+import * as ROUTES from "../../constants/routes";
+import SignInForm from "../../components/SignInForm";
+import { FirebaseContext } from "../../components/Firebase";
 
-type State = {
-  username: String,
-  password: String
-};
-
-export default class Login extends PureComponent<{}, State> {
-  state = {
-    username: "",
-    password: ""
-  };
-  changeValue = (e, key) => {
-    this.setState({
-      [key]: e.target.value
-    });
-  };
-
+export default class Login extends PureComponent {
   render() {
     return (
       <div>
-        <input onChange={e => this.changeValue(e, "username")} />
-        <input
-          type="password"
-          onChange={e => this.changeValue(e, "password")}
-        />
-        <Link to={"/account"}>
-          <button>Login</button>
-        </Link>
+        <FirebaseContext.Consumer>
+          {firebase => <SignInForm firebase={firebase} />}
+        </FirebaseContext.Consumer>
         <Link to={ROUTES.SIGN_UP}>
           <button>Add account</button>
         </Link>

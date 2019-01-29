@@ -1,4 +1,6 @@
 import React, { PureComponent } from "react";
+import { withRouter } from "react-router-dom";
+import * as ROUTES from '../../constants/routes';
 
 class SignUpForm extends PureComponent {
   state = {
@@ -18,6 +20,7 @@ class SignUpForm extends PureComponent {
       .doCreateUserWithEmailAndPassword(email, password)
       .then(authUser => {
         this.setState({ ...this.state });
+        this.props.history.push(ROUTES.ACCOUNT)
       })
       .catch(error => {
         this.setState({
@@ -52,4 +55,4 @@ class SignUpForm extends PureComponent {
     );
   }
 }
-export default SignUpForm;
+export default withRouter(SignUpForm);

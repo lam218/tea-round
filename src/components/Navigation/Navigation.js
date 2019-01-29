@@ -2,7 +2,13 @@ import React from "react";
 import { Link } from "react-router-dom";
 import * as ROUTES from "../../constants/routes";
 
-const Navigation = () => {
+import SignOutButton from '../SignOutButton'
+
+const Navigation = ({ authUser }) => (
+  <div>{authUser ? <NavigationAuth /> : <NavigationNonAuth />}</div>
+);
+
+const NavigationAuth = () => {
   return (
     <div>
       <ul>
@@ -14,6 +20,18 @@ const Navigation = () => {
         </li>
         <li>
           <Link to={ROUTES.TEA_ROUND}>Tea Round</Link>
+        </li>
+        <SignOutButton />
+      </ul>
+    </div>
+  );
+};
+const NavigationNonAuth = () => {
+  return (
+    <div>
+      <ul>
+        <li>
+          <Link to={ROUTES.SIGN_IN}>Login</Link>
         </li>
       </ul>
     </div>
