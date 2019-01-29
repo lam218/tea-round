@@ -1,16 +1,16 @@
 import React, { PureComponent } from "react";
-import Modal from "../../components/Modal";
-import ToDoList from "../../components/ToDoList";
+import ToDoList from "../../containers/VisibleToDoList";
+import Footer from '../../components/Footer';
+import AddToDo from "../../containers/AddToDo";
+import Total from '../../containers/Total';
 
-export default class Account extends PureComponent {
+type State = {
+  validation: boolean,
+};
+export default class Account extends PureComponent<{}, State> {
   state = {
-    listItems: [],
-    show: false,
     validation: false,
     value: ""
-  };
-  toggleModal = (shouldShow) => {
-    this.setState({ show: shouldShow, validation: false });
   };
   addItem = () => {
     const { value } = this.state;
@@ -18,30 +18,16 @@ export default class Account extends PureComponent {
       this.setState({
         validation: true
       });
-    } else {
-      this.setState(prevState => ({
-        listItems: [...prevState.listItems, { item: prevState.value }],
-        show: false,
-        value: ""
-      }));
-    }
-  };
-  typeValue = e => {
-    this.setState({
-      value: e.target.value
-    });
+    } 
   };
   render() {
-    const { listItems, show, value, validation } = this.state;
+    const { validation } = this.state;
     return (
       <div className="App">
-        <button onClick={() => this.toggleModal(true)}>show</button>
-        <Modal handleClose={() => this.toggleModal(false)} show={show}>
-          <input onChange={this.typeValue} value={value} />
-          {validation && <p>Uh oh! Looks like you haven't added a task</p>}
-          <button onClick={this.addItem}>add</button>
-        </Modal>
-        <ToDoList listItems={listItems} />
+        <AddToDo validation={validation}/>
+        <ToDoList />
+        <Total />
+        <Footer />
       </div>
     );
   }

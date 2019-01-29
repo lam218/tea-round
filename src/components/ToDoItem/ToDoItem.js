@@ -1,11 +1,16 @@
-import React from 'react';
+import React from "react";
 
 type Props = {
-    item: String
-}
+  text: String,
+  onClick: () => void,
+  completed: number
+};
 
-const ToDoItem = (props: Props) => (
-    <h2>{props.item}</h2>
+const ToDoItem = ({ onClick, completed, text }: Props) => (
+  <div>
+    <p onClick={onClick}>{text}</p>
+    <p>{completed}</p>
+  </div>
 );
 
 export default ToDoItem;

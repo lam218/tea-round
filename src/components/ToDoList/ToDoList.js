@@ -2,10 +2,16 @@ import React from "react";
 import ToDoItem from "../ToDoItem";
 
 type Props = {
-  listItems: String[]
+  todos: String[],
+  claimTodo: () => void
 };
 
-const ToDoList = (props: Props) => {
-  return props.listItems.map(item => <ToDoItem key={item.item} item={item.item} />);
+const ToDoList = ({ todos, claimTodo }: Props) => {
+  return (
+    todos &&
+    todos.map(item => (
+      <ToDoItem key={item.id} {...item} onClick={() => claimTodo(item.id)} />
+    ))
+  );
 };
 export default ToDoList;
