@@ -1,7 +1,6 @@
-let nextTodoId = 0;
 export const addTodo = text => ({
   type: "ADD_TODO",
-  id: nextTodoId++,
+  id: Math.random(),
   text
 });
 export const setVisibilityFilter = filter => ({
@@ -16,6 +15,9 @@ export const claimTodo = id => ({
 export const callTodo = todos => ({
   type: "CALL_TODO",
   todos
+});
+export const clearState = () => ({
+  type: "CLEAR_STATE"
 });
 
 export const VisibilityFilters = {

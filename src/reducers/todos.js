@@ -17,6 +17,8 @@ const todos = (state = [], action) => {
       );
     case "CALL_TODO":
       return action.todos;
+    case "CLEAR_STATE":
+      return [];
     default:
       return state;
   }
