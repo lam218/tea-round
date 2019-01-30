@@ -13,6 +13,10 @@ export const claimTodo = id => ({
   type: "CLAIM_TODO",
   id
 });
+export const callTodo = todos => ({
+  type: "CALL_TODO",
+  todos
+});
 
 export const VisibilityFilters = {
   ORDER_CREATED: "ORDER_CREATED",

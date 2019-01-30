@@ -15,6 +15,8 @@ const todos = (state = [], action) => {
           ? { ...todo, completed: todo.completed + 1 }
           : todo
       );
+    case "CALL_TODO":
+      return action.todos;
     default:
       return state;
   }
