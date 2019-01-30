@@ -1,6 +1,7 @@
 import React, { PureComponent } from "react";
 import { withRouter } from "react-router-dom";
 import * as ROUTES from '../../constants/routes';
+import { withFirebase } from "../Firebase";
 
 class SignUpForm extends PureComponent {
   state = {
@@ -55,4 +56,4 @@ class SignUpForm extends PureComponent {
     );
   }
 }
-export default withRouter(SignUpForm);
+export default withRouter(withFirebase(SignUpForm));

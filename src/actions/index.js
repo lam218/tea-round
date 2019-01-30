@@ -9,12 +9,10 @@ export const setVisibilityFilter = filter => ({
   filter
 });
 
-export const claimTodo = (id) => {
-  return {
-    type: "CLAIM_TODO",
-    id
-  };
-};
+export const claimTodo = id => ({
+  type: "CLAIM_TODO",
+  id
+});
 
 export const VisibilityFilters = {
   ORDER_CREATED: "ORDER_CREATED",

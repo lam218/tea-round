@@ -1,6 +1,7 @@
 import React, { PureComponent } from "react";
 import * as ROUTES from "../../constants/routes";
 import { withRouter } from "react-router-dom";
+import { withFirebase } from "../Firebase";
 
 class SignInForm extends PureComponent {
   state = {
@@ -14,11 +15,12 @@ class SignInForm extends PureComponent {
   };
   onSubmit = event => {
     const { email, password } = this.state;
-    this.props.firebase
+    const { firebase, history } = this.props;
+    firebase
       .doSignInWithEmailAndPassword(email, password)
       .then(authUser => {
         this.setState({ ...this.state });
-        this.props.history.push(ROUTES.ACCOUNT);
+        history.push(ROUTES.ACCOUNT);
       })
       .catch(error => {
         this.setState({
@@ -41,4 +43,5 @@ class SignInForm extends PureComponent {
     );
   }
 }
-export default withRouter(SignInForm);
+
+export default withRouter(withFirebase(SignInForm));

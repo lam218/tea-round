@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { addTodo } from "../actions";
 
-const AddTodo = ({ dispatch, validation }) => {
+const AddTodo = ({ dispatch }) => {
   let input;
 
   return (
@@ -18,7 +18,6 @@ const AddTodo = ({ dispatch, validation }) => {
         }}
       >
         <input ref={node => (input = node)} />
-        {validation && <p>Uh oh! Looks like you haven't added a task</p>}
         <button type="submit">Add Todo</button>
       </form>
     </div>

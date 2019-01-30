@@ -2,7 +2,7 @@ import React from "react";
 import ToDoItem from "../ToDoItem";
 
 type Props = {
-  todos: String[],
+  todos: [{ id: number, onClick: () => void, completed: number, text: String }],
   claimTodo: () => void
 };
 
