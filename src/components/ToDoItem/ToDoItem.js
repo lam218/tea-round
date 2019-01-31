@@ -8,8 +8,9 @@ type Props = {
 
 const ToDoItem = ({ onClick, completed, text }: Props) => (
   <div>
-    <p onClick={onClick}>{text}</p>
+    <p>{text}</p>
     <p>{completed}</p>
+    <button onClick={onClick}>Completed</button>
   </div>
 );
 

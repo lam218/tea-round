@@ -7,7 +7,7 @@ import Login from "./scenes/Login";
 import Account from "./scenes/Account";
 import CreateAccount from "./scenes/CreateAccount";
 import PasswordForget from "./scenes/PasswordForget";
-//import TeaRound from './scenes/TeaRound';
+import TeaRound from "./scenes/TeaRound";
 import "./App.css";
 
 class App extends PureComponent<{}, State> {
@@ -20,7 +20,6 @@ class App extends PureComponent<{}, State> {
         ? this.setState({ authUser })
         : this.setState({ authUser: null });
     });
-    
   }
   render() {
     return (
@@ -31,7 +30,7 @@ class App extends PureComponent<{}, State> {
           {/* <Route exact path={ROUTES.HOME} component={Home} /> */}
           <Route path={ROUTES.SIGN_IN} component={Login} />
           <Route path={ROUTES.ACCOUNT} component={Account} />
-          {/* <Route path={ROUTES.TEA_ROUND} component={TeaRound} /> */}
+          <Route path={ROUTES.TEA_ROUND} component={TeaRound} />
           <Route path={ROUTES.SIGN_UP} component={CreateAccount} />
           <Route path={ROUTES.PASSWORD_FORGET} component={PasswordForget} />
         </div>

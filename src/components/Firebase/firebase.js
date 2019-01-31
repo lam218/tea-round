@@ -2,7 +2,6 @@ import app from "firebase/app";
 import "firebase/auth";
 import "firebase/database";
 
-
 const config = {
   apiKey: process.env.REACT_APP_API_KEY,
   authDomain: process.env.REACT_APP_AUTH_DOMAIN,
@@ -46,6 +45,33 @@ class Firebase {
         let todos = (snapshot.val() && snapshot.val().todos) || [];
         return todos;
       });
+  };
+  addFriend = email => {
+    this.db
+      .ref("users/" + this.auth.currentUser.uid + "/friends/")
+      .push({ email })
+      .catch(err => console.err(err));
+  };
+  removeFriend = (email, key) => {
+    return this.db
+      .ref("users/" + this.auth.currentUser.uid + "/friends/" + key)
+      .remove();
+  };
+  getFriends = () => {
+    return this.db
+      .ref("users/" + this.auth.currentUser.uid + "/friends")
+      .once("value")
+      .then(snapshot => {
+        let friends = snapshot.val() || [];
+        return friends;
+      });
+  };
+  initializeTeaRound = friends => {
+    this.db.ref("users/" + this.auth.currentUser.uid + "/teaRound").update({
+      email: this.auth.currentUser.email,
+      friends: friends,
+      time: Date.now()
+    });
   };
 }
 
