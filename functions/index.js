@@ -29,14 +29,32 @@ exports.callTeaRound = functions.database
   .onUpdate((change, context) => {
     const snapshot = change.after;
     const val = snapshot.val();
-    
-    console.log(val.friends)
+
     const mailOptions = {
       from: '"Tea round" <lucyamurray@gmail.com>',
       to: val.friends
     };
     mailOptions.subject = "Tea or coffee?";
     mailOptions.text = "Would you like to have a tea or coffee";
+    return mailTransport
+      .sendMail(mailOptions)
+      .then(() => console.log("Its sent"))
+      .catch(err => console.error(err));
+  });
+
+exports.sendInviteEmail = functions.database
+  .ref("users/{uid}/inviteFriends")
+  .onWrite((change, context) => {
+    const snapshot = change.after;
+    const val = snapshot.val();
+    const mailOptions = {
+      from: '"Tea round" <lucyamurray@gmail.com>',
+      to: val.email
+    };
+    mailOptions.subject = "Join tea round";
+    mailOptions.text = `You were invited to join tea round ${
+      val.inviteName ? "by" + inviteName : ""
+    }. Join now by using this link ...`;
     return mailTransport
       .sendMail(mailOptions)
       .then(() => console.log("Its sent"))

@@ -1,12 +1,12 @@
 import React, { PureComponent } from "react";
 import { withRouter } from "react-router-dom";
-import * as ROUTES from '../../constants/routes';
+import * as ROUTES from "../../constants/routes";
 import { withFirebase } from "../Firebase";
 
 class SignUpForm extends PureComponent {
   state = {
     name: "",
-    username: "",
+    email: "",
     password: "",
     errorMessage: null
   };
@@ -16,12 +16,12 @@ class SignUpForm extends PureComponent {
     });
   };
   onSubmit = event => {
-    const { email, password } = this.state;
+    const { email, name, password } = this.state;
     this.props.firebase
-      .doCreateUserWithEmailAndPassword(email, password)
+      .doCreateUserWithEmailAndPassword(email, name, password)
       .then(authUser => {
         this.setState({ ...this.state });
-        this.props.history.push(ROUTES.ACCOUNT)
+        this.props.history.push(ROUTES.ACCOUNT);
       })
       .catch(error => {
         this.setState({

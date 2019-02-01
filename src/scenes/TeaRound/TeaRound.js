@@ -1,11 +1,14 @@
 import React, { PureComponent } from "react";
+import Modal from "../../components/Modal";
 import { withFirebase } from "../../components/Firebase";
 
 class TeaRound extends PureComponent {
   state = {
     email: "",
     friends: [],
-    keys: []
+    keys: [],
+    friendMessage: false,
+    showModal: false
   };
   componentWillReceiveProps() {
     const { firebase } = this.props;
@@ -16,7 +19,7 @@ class TeaRound extends PureComponent {
   updateFriendList = () => {
     const { firebase } = this.props;
     firebase.getFriends().then(res => {
-      let users = Object.values(res).map(friend => friend.email);
+      let users = Object.values(res);
       let keys = Object.keys(res);
       this.setState({
         friends: users,
@@ -34,10 +37,15 @@ class TeaRound extends PureComponent {
       email: ""
     });
   };
+  toggleModal = shouldShow => {
+    this.setState({
+      showModal: shouldShow
+    });
+  };
 
   render() {
     const { firebase } = this.props;
-    const { friends, keys } = this.state;
+    const { friends, keys, email, friendMessage, showModal } = this.state;
 
     return (
       <div>
@@ -48,28 +56,69 @@ class TeaRound extends PureComponent {
         />
         <button
           onClick={() => {
-            firebase.addFriend(this.state.email);
-            this.clearInput();
-            this.updateFriendList();
+            firebase.addFriend(this.state.email).then(res => {
+              if (res === false) {
+                this.setState({
+                  friendMessage: true,
+                  showModal: true
+                });
+              } else {
+                this.updateFriendList();
+                this.clearInput();
+              }
+            });
           }}
         >
           Add friend
         </button>
         <div>
           <h3>Friends</h3>
-          {Object.values(friends).map((friend, i) => (
-            <div key={keys[i]}>
-              <p>{friend}</p>
-              <span
-                onClick={() => {
-                  firebase.removeFriend(friend, keys[i]);
-                  this.updateFriendList();
-                }}
-              >
-                x
-              </span>
+
+          {friends.map((friend, i) => (
+            <div key={friend.uid}>
+              {friend.invited && !friend.accepted && friend.outbound && (
+                <p>{friend.email} - Invited</p>
+              )}
+              {friend.invited && !friend.accepted && !friend.outbound && (
+                <div>
+                  <p>{friend.email}</p>
+                  <button
+                    onClick={() => firebase.acceptFriend(friend, keys[i])}
+                  >
+                    Accept
+                  </button>
+                </div>
+              )}
+              {friend.invited && friend.accepted && (
+                <div>
+                  <p>{friend.email} - in round</p>
+                  <span
+                    onClick={() => {
+                      firebase.removeFriend(friend);
+                      this.updateFriendList();
+                    }}
+                  >
+                    x
+                  </span>
+                </div>
+              )}
             </div>
           ))}
+          {friendMessage && (
+            <Modal toggleModal={() => this.toggleModal} show={showModal}>
+              <p>
+                It looks like {email} doesn't have an account. Invite them now
+              </p>
+              <button
+                onClick={() => {
+                  firebase.inviteFriend(email);
+                  this.toggleModal(false);
+                }}
+              >
+                Send Invite email
+              </button>
+            </Modal>
+          )}
         </div>
         <button onClick={() => firebase.initializeTeaRound(this.state.friends)}>
           Trigger Tea Round

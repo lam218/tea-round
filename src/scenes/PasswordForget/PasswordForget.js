@@ -29,7 +29,12 @@ class PasswordForget extends PureComponent {
   render() {
     return (
       <form onSubmit={e => this.onSubmit(e)}>
-        <input type="email" onChange={e => this.changeValue(e, "email")} />
+        <p>Type the email you signed up with to reset your password</p>
+        <input
+          type="email"
+          onChange={e => this.changeValue(e, "email")}
+          placeholder="email"
+        />
         <button type="submit">Send</button>
       </form>
     );

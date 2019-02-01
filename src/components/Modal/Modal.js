@@ -2,17 +2,17 @@ import React from "react";
 import "./Modal.scss";
 
 type Props = {
-  handleClose: () => void,
+  toggleModal: (boolean) => void,
   show: boolean,
   children: React.ReactNode
 };
 
-const Modal = ({ handleClose, show, children }: Props) => {
+const Modal = ({ toggleModal, show, children }: Props) => {
   return (
     <div className={show ? "modal display-block" : "modal display-none"}>
       <section className="modal-main">
         {children}
-        <button onClick={handleClose}>close</button>
+        <button onClick={toggleModal(false)}>close</button>
       </section>
     </div>
   );

@@ -18,8 +18,15 @@ class Firebase {
     this.auth = app.auth();
     this.db = app.database();
   }
-  doCreateUserWithEmailAndPassword = (email, password) =>
-    this.auth.createUserWithEmailAndPassword(email, password);
+  doCreateUserWithEmailAndPassword = (email, displayName, password) => {
+    return this.auth
+      .createUserWithEmailAndPassword(email, password)
+      .then(() => {
+        return this.db
+          .ref("/users/" + this.auth.currentUser.uid + "/details")
+          .set({ uid: this.auth.currentUser.uid, email, name: displayName });
+      });
+  };
 
   doSignInWithEmailAndPassword = (email, password) =>
     this.auth.signInWithEmailAndPassword(email, password);
@@ -47,10 +54,83 @@ class Firebase {
       });
   };
   addFriend = email => {
+    return this.db
+      .ref("users/")
+      .once("value")
+      .then(snapshot => {
+        let users = snapshot.val() || [];
+        let userFound = Object.values(users).find(
+          user => user.details.email === email
+        );
+        if (userFound && userFound.details.uid !== this.auth.currentUser.uid) {
+          this.db.ref("users/" + userFound.details.uid + "/friends").push({
+            email: this.auth.currentUser.email,
+            uid: this.auth.currentUser.uid,
+            outbound: false,
+            invited: true,
+            accepted: false
+          });
+          return this.db
+            .ref("users/" + this.auth.currentUser.uid + "/friends/")
+            .push({
+              email: userFound.details.email,
+              uid: userFound.details.uid,
+              outbound: true,
+              invited: true,
+              accepted: false
+            })
+            .catch(err => console.err(err));
+        } else {
+          return false;
+        }
+      });
+  };
+  acceptFriend = (user, key) => {
+    return this.db
+      .ref("users/")
+      .once("value")
+      .then(snapshot => {
+        let users = snapshot.val() || [];
+        let friendKey = Object.values(users)
+          .map(
+            (newUser, i) =>
+              newUser.details.email === user.email &&
+              Object.keys(newUser.friends)
+          )
+          .filter(key => key !== false)
+          .concat([]);
+        debugger;
+        if (friendKey && user && user.uid !== this.auth.currentUser.uid) {
+          this.db.ref("users/" + user.uid + "/friends/" + friendKey).set({
+            email: this.auth.currentUser.email,
+            uid: this.auth.currentUser.uid,
+            outbound: false,
+            invited: true,
+            accepted: true
+          });
+          return this.db
+            .ref("users/" + this.auth.currentUser.uid + "/friends/" + key)
+            .set({
+              email: user.email,
+              uid: user.uid,
+              outbound: true,
+              invited: true,
+              accepted: true
+            })
+            .catch(err => console.err(err));
+        } else {
+          return false;
+        }
+      });
+  };
+  inviteFriend = email => {
     this.db
-      .ref("users/" + this.auth.currentUser.uid + "/friends/")
-      .push({ email })
-      .catch(err => console.err(err));
+      .ref("users/" + this.auth.currentUser.uid + "/inviteFriends")
+      .remove();
+    let name = this.auth.currentUser.displayName;
+    return this.db
+      .ref("users/" + this.auth.currentUser.uid + "/inviteFriends")
+      .set({ email, inviteName: name });
   };
   removeFriend = (email, key) => {
     return this.db
@@ -67,9 +147,10 @@ class Firebase {
       });
   };
   initializeTeaRound = friends => {
+    let friendEmails = friends.map(friend => friend.email);
     this.db.ref("users/" + this.auth.currentUser.uid + "/teaRound").update({
       email: this.auth.currentUser.email,
-      friends: friends,
+      friends: friendEmails,
       time: Date.now()
     });
   };

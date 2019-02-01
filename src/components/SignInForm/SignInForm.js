@@ -6,7 +6,8 @@ import { withFirebase } from "../Firebase";
 class SignInForm extends PureComponent {
   state = {
     email: "",
-    password: ""
+    password: "",
+    errorMessage: null
   };
   changeValue = (e, key) => {
     this.setState({
@@ -31,14 +32,27 @@ class SignInForm extends PureComponent {
     event.preventDefault();
   };
   render() {
+    const { errorMessage } = this.state;
     return (
       <form onSubmit={e => this.onSubmit(e)}>
-        <input onChange={e => this.changeValue(e, "email")} />
-        <input
-          type="password"
-          onChange={e => this.changeValue(e, "password")}
-        />
+        <label>
+          Email
+          <input
+            type="email"
+            onChange={e => this.changeValue(e, "email")}
+            placeholder="email"
+          />
+        </label>
+        <label>
+          Password
+          <input
+            type="password"
+            onChange={e => this.changeValue(e, "password")}
+            placeholder="password"
+          />
+        </label>
         <button type="submit">Login</button>
+        {errorMessage && <p>Looks like the email or password is incorrect</p>}
       </form>
     );
   }

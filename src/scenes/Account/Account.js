@@ -9,25 +9,37 @@ import { connect } from "react-redux";
 import { callTodo } from "../../actions";
 
 class Account extends Component {
+  state = {
+    loading: true
+  };
   componentDidMount() {
-    this.props.firebase.auth.onAuthStateChanged(
+    const { firebase, dispatch } = this.props;
+    firebase.auth.onAuthStateChanged(
       authUser =>
         authUser &&
-        this.props.firebase
-          .getData()
-          .then(res =>
-            this.props.dispatch(callTodo(res))
-          )
+        firebase.getData().then(res => {
+          dispatch(callTodo(res));
+          this.setState({
+            loading: false
+          });
+        })
     );
   }
 
   render() {
+    const { loading } = this.state;
     return (
       <div className="App">
         <UpdatePassword />
         <AddToDo />
-        <ToDoList />
-        <Total />
+        {loading ? (
+          <div>Loading</div>
+        ) : (
+          <div>
+            <ToDoList />
+            <Total />
+          </div>
+        )}
         <Footer />
       </div>
     );
