@@ -99,7 +99,6 @@ class Firebase {
           )
           .filter(key => key !== false)
           .concat([]);
-        debugger;
         if (friendKey && user && user.uid !== this.auth.currentUser.uid) {
           this.db.ref("users/" + user.uid + "/friends/" + friendKey).set({
             email: this.auth.currentUser.email,

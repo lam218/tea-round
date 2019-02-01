@@ -83,7 +83,10 @@ class TeaRound extends PureComponent {
                 <div>
                   <p>{friend.email}</p>
                   <button
-                    onClick={() => firebase.acceptFriend(friend, keys[i])}
+                    onClick={() => {
+                      firebase.acceptFriend(friend, keys[i]);
+                      this.updateFriendList();
+                    }}
                   >
                     Accept
                   </button>
