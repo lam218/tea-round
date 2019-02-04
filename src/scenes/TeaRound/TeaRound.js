@@ -10,7 +10,7 @@ class TeaRound extends PureComponent {
     friendMessage: false,
     showModal: false
   };
-  componentWillReceiveProps() {
+  componentDidMount() {
     const { firebase } = this.props;
     firebase.auth.onAuthStateChanged(
       authUser => authUser && this.updateFriendList()
