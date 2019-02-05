@@ -1,6 +1,7 @@
 import React, { PureComponent } from "react";
 import Modal from "../../components/Modal";
 import { withFirebase } from "../../components/Firebase";
+import { withRouter } from "react-router-dom";
 
 class TeaRound extends PureComponent {
   state = {
@@ -44,7 +45,7 @@ class TeaRound extends PureComponent {
   };
 
   render() {
-    const { firebase } = this.props;
+    const { firebase, history } = this.props;
     const { friends, keys, email, friendMessage, showModal } = this.state;
 
     return (
@@ -123,7 +124,12 @@ class TeaRound extends PureComponent {
             </Modal>
           )}
         </div>
-        <button onClick={() => firebase.initializeTeaRound(this.state.friends)}>
+        <button
+          onClick={() => {
+            firebase.initializeTeaRound(this.state.friends);
+            history.push(`/teaRound?${firebase.auth.currentUser.uid}`);
+          }}
+        >
           Trigger Tea Round
         </button>
       </div>
@@ -131,4 +137,4 @@ class TeaRound extends PureComponent {
   }
 }
 
-export default withFirebase(TeaRound);
+export default withRouter(withFirebase(TeaRound));

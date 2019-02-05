@@ -24,6 +24,7 @@ const mailTransport = nodemailer.createTransport({
     rejectUnauthorized: false
   }
 });
+const url = 'https://suspicious-bardeen-701321.netlify.com/';
 exports.callTeaRound = functions.database
   .ref("users/{uid}/teaRound")
   .onUpdate((change, context) => {
@@ -35,7 +36,7 @@ exports.callTeaRound = functions.database
       to: val.friends
     };
     mailOptions.subject = "Tea or coffee?";
-    mailOptions.text = "Would you like to have a tea or coffee";
+    mailOptions.text = `Would you like to have a tea or coffee ${url}/tearound?${val.uid}`;
     return mailTransport
       .sendMail(mailOptions)
       .then(() => console.log("Its sent"))
@@ -54,7 +55,7 @@ exports.sendInviteEmail = functions.database
     mailOptions.subject = "Join tea round";
     mailOptions.text = `You were invited to join tea round ${
       val.inviteName ? "by" + inviteName : ""
-    }. Join now by using this link ...`;
+    }. Join now by using this link ${url}`;
     return mailTransport
       .sendMail(mailOptions)
       .then(() => console.log("Its sent"))

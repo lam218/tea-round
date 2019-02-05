@@ -8,6 +8,7 @@ import Account from "./scenes/Account";
 import CreateAccount from "./scenes/CreateAccount";
 import PasswordForget from "./scenes/PasswordForget";
 import TeaRound from "./scenes/TeaRound";
+import Choice from './scenes/Choice';
 import "./App.css";
 
 class App extends PureComponent<{}, State> {
@@ -30,7 +31,8 @@ class App extends PureComponent<{}, State> {
           {/* <Route exact path={ROUTES.HOME} component={Home} /> */}
           <Route path={ROUTES.SIGN_IN} component={Login} />
           <Route path={ROUTES.ACCOUNT} component={Account} />
-          <Route path={ROUTES.TEA_ROUND} component={TeaRound} />
+          <Route path={ROUTES.ADMIN} component={TeaRound} />
+          <Route path={ROUTES.TEA_ROUND} component={Choice} />
           <Route path={ROUTES.SIGN_UP} component={CreateAccount} />
           <Route path={ROUTES.PASSWORD_FORGET} component={PasswordForget} />
         </div>

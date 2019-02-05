@@ -148,10 +148,49 @@ class Firebase {
   initializeTeaRound = friends => {
     let friendEmails = friends.map(friend => friend.email);
     this.db.ref("users/" + this.auth.currentUser.uid + "/teaRound").update({
+      uid: this.auth.currentUser.uid,
       email: this.auth.currentUser.email,
       friends: friendEmails,
       time: Date.now()
     });
+  };
+  addDrink = (drink, id, notes) => {
+    this.db.ref("users/" + id + "/teaRound/drinks").push({
+      drink,
+      email: this.auth.currentUser.email,
+      notes
+    });
+  };
+  removeDrink = (id, key) => {
+    this.db.ref("users/" + id + "/teaRound/drinks/" + key).remove();
+  };
+  updateDrink = (id, key, drink, notes) => {
+    if (notes && drink) {
+      return this.db.ref("users/" + id + "/teaRound/drinks/" + key).update({
+        drink,
+        email: this.auth.currentUser.email,
+        notes
+      });
+    } else if (notes) {
+      return this.db.ref("users/" + id + "/teaRound/drinks/" + key).update({
+        email: this.auth.currentUser.email,
+        notes
+      });
+    } else if (drink) {
+      return this.db.ref("users/" + id + "/teaRound/drinks/" + key).update({
+        drink,
+        email: this.auth.currentUser.email
+      });
+    } else return;
+  };
+  getDrinks = id => {
+    return this.db
+      .ref("users/" + id + "/teaRound/drinks")
+      .once("value")
+      .then(snapshot => {
+        let drinks = snapshot.val() || [];
+        return drinks;
+      });
   };
 }
 
