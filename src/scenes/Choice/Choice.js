@@ -38,7 +38,7 @@ class Choice extends React.PureComponent {
     });
   };
   render() {
-    const { firebase, teaRoundUid } = this.props;
+    const { firebase } = this.props;
     const {
       drinks,
       drinkChoice,
