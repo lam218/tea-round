@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import * as ROUTES from "../../constants/routes";
+import "./Navigation.scss";
 
 import SignOutButton from "../SignOutButton";
 
@@ -10,12 +11,12 @@ const Navigation = ({ authUser }) => (
 
 const NavigationAuth = () => {
   return (
-    <div>
-      <ul>
-        <li>
+    <div className="nav">
+      <ul className="nav__list">
+        <li className="nav__list-item">
           <Link to={ROUTES.ACCOUNT}>Account</Link>
         </li>
-        <li>
+        <li className="nav__list-item">
           <Link to={ROUTES.ADMIN}>Admin</Link>
         </li>
         <SignOutButton />
@@ -25,11 +26,11 @@ const NavigationAuth = () => {
 };
 const NavigationNonAuth = () => {
   return (
-    <div>
-      <ul>
-        <li>
+    <div className="nav">
+      <ul className="nav__list">
+        {/* <li className="nav__list-item">
           <Link to={ROUTES.SIGN_IN}>Login</Link>
-        </li>
+        </li> */}
       </ul>
     </div>
   );

@@ -91,24 +91,31 @@ class Firebase {
       .once("value")
       .then(snapshot => {
         let users = snapshot.val() || [];
+        const currentUid = this.auth.currentUser.uid;
         let friendKey = Object.values(users)
-          .map(
-            (newUser, i) =>
-              newUser.details.email === user.email &&
-              Object.keys(newUser.friends)
-          )
-          .filter(key => key !== false)
-          .concat([]);
-        if (friendKey && user && user.uid !== this.auth.currentUser.uid) {
+          .map((newUser, i) => {
+            if (newUser.details.uid === user.uid) {
+              let friends = Object.values(newUser.friends)
+                .map((friend, i) => ({
+                  uid: friend.uid,
+                  key: Object.keys(newUser.friends)[i]
+                }))
+                .filter(f => f.uid === currentUid);
+              return friends[0].key;
+            }
+            return false;
+          })
+          .filter(fin => fin !== false)[0];
+        if (friendKey && user && user.uid !== currentUid) {
           this.db.ref("users/" + user.uid + "/friends/" + friendKey).set({
             email: this.auth.currentUser.email,
-            uid: this.auth.currentUser.uid,
+            uid: currentUid,
             outbound: false,
             invited: true,
             accepted: true
           });
           return this.db
-            .ref("users/" + this.auth.currentUser.uid + "/friends/" + key)
+            .ref("users/" + currentUid + "/friends/" + key)
             .set({
               email: user.email,
               uid: user.uid,
@@ -131,9 +138,24 @@ class Firebase {
       .ref("users/" + this.auth.currentUser.uid + "/inviteFriends")
       .set({ email, inviteName: name });
   };
-  removeFriend = (email, key) => {
+  removeFriend = (user, ourKey) => {
+    const currentUid = this.auth.currentUser.uid;
+    this.db
+      .ref("users/" + user.uid + "/friends")
+      .once("value")
+      .then(snapshot => {
+        let snapshotUser = snapshot.val() || [];
+
+        let newKey = Object.values(snapshotUser)
+          .map((friend, i) => ({
+            uid: friend.uid,
+            key: Object.keys(snapshotUser)[i]
+          }))
+          .filter(f => f.uid === currentUid)[0].key;
+        return this.db.ref("users/" + user.uid + "/friends/" + newKey).remove();
+      });
     return this.db
-      .ref("users/" + this.auth.currentUser.uid + "/friends/" + key)
+      .ref("users/" + this.auth.currentUser.uid + "/friends/" + ourKey)
       .remove();
   };
   getFriends = () => {

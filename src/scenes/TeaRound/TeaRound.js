@@ -17,15 +17,37 @@ class TeaRound extends PureComponent {
       authUser => authUser && this.updateFriendList()
     );
   }
+  checkDepth = object => {
+    let level = 1;
+    let key;
+    for (key in object) {
+      if (!object.hasOwnProperty(key)) continue;
+
+      if (typeof object[key] == "object") {
+        let depth = this.checkDepth(object[key]) + 1;
+        level = Math.max(depth, level);
+      }
+    }
+    return level;
+  };
   updateFriendList = () => {
     const { firebase } = this.props;
+
     firebase.getFriends().then(res => {
-      let users = Object.values(res);
-      let keys = Object.keys(res);
-      this.setState({
-        friends: users,
-        keys: keys
-      });
+      let depth = this.checkDepth(res);
+      if (depth > 1) {
+        let users = Object.values(res);
+        let keys = Object.keys(res);
+        this.setState({
+          friends: users,
+          keys: keys
+        });
+      } else {
+        this.setState({
+          friends: [res]
+          //keys: keys
+        });
+      }
     });
   };
   onChange = (e, key) => {
@@ -98,7 +120,7 @@ class TeaRound extends PureComponent {
                   <p>{friend.email} - in round</p>
                   <span
                     onClick={() => {
-                      firebase.removeFriend(friend);
+                      firebase.removeFriend(friend, keys[i]);
                       this.updateFriendList();
                     }}
                   >

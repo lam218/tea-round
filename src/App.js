@@ -8,7 +8,8 @@ import Account from "./scenes/Account";
 import CreateAccount from "./scenes/CreateAccount";
 import PasswordForget from "./scenes/PasswordForget";
 import TeaRound from "./scenes/TeaRound";
-import Choice from './scenes/Choice';
+import Choice from "./scenes/Choice";
+import Home from "./scenes/Home";
 import "./App.css";
 
 class App extends PureComponent<{}, State> {
@@ -23,12 +24,16 @@ class App extends PureComponent<{}, State> {
     });
   }
   render() {
+    const { authUser } = this.state;
     return (
       <Router>
         <div className="App">
-          <Navigation authUser={this.state.authUser} />
-          <hr />
-          {/* <Route exact path={ROUTES.HOME} component={Home} /> */}
+          <Navigation authUser={authUser} />
+          <Route
+            exact
+            path={ROUTES.HOME}
+            component={authUser => <Home authUser={authUser} />}
+          />
           <Route path={ROUTES.SIGN_IN} component={Login} />
           <Route path={ROUTES.ACCOUNT} component={Account} />
           <Route path={ROUTES.ADMIN} component={TeaRound} />

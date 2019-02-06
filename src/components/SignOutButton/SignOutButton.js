@@ -11,7 +11,7 @@ const SignOutButton = ({ firebase, history, dispatch }) => {
     history.push(ROUTES.SIGN_IN);
     dispatch(clearState())
   };
-  return <button onClick={doSignOut}>Sign Out</button>;
+  return <button className="nav__list-item--right" onClick={doSignOut}>Sign Out</button>;
 };
 
 export default connect()(withRouter(withFirebase(SignOutButton)));
