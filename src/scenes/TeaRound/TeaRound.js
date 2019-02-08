@@ -33,9 +33,14 @@ class TeaRound extends PureComponent {
   updateFriendList = () => {
     const { firebase } = this.props;
 
-    firebase.getFriends().then(res => {
+    firebase.Friends.getFriends().then(res => {
       let depth = this.checkDepth(res);
-      if (depth > 1) {
+      if (depth === 1 && (res.length && res.length !== 0)) {
+        this.setState({
+          friends: [res]
+          //keys: keys
+        });
+      } else if (depth > 1) {
         let users = Object.values(res);
         let keys = Object.keys(res);
         this.setState({
@@ -44,8 +49,7 @@ class TeaRound extends PureComponent {
         });
       } else {
         this.setState({
-          friends: [res]
-          //keys: keys
+          friends: []
         });
       }
     });
@@ -79,7 +83,7 @@ class TeaRound extends PureComponent {
         />
         <button
           onClick={() => {
-            firebase.addFriend(this.state.email).then(res => {
+            firebase.Friends.addFriend(this.state.email).then(res => {
               if (res === false) {
                 this.setState({
                   friendMessage: true,
@@ -97,39 +101,45 @@ class TeaRound extends PureComponent {
         <div>
           <h3>Friends</h3>
 
-          {friends.map((friend, i) => (
-            <div key={friend.uid}>
-              {friend.invited && !friend.accepted && friend.outbound && (
-                <p>{friend.email} - Invited</p>
-              )}
-              {friend.invited && !friend.accepted && !friend.outbound && (
-                <div>
-                  <p>{friend.email}</p>
-                  <button
-                    onClick={() => {
-                      firebase.acceptFriend(friend, keys[i]);
-                      this.updateFriendList();
-                    }}
-                  >
-                    Accept
-                  </button>
-                </div>
-              )}
-              {friend.invited && friend.accepted && (
-                <div>
-                  <p>{friend.email} - in round</p>
-                  <span
-                    onClick={() => {
-                      firebase.removeFriend(friend, keys[i]);
-                      this.updateFriendList();
-                    }}
-                  >
-                    x
-                  </span>
-                </div>
-              )}
+          {friends.length > 0 ? (
+            friends.map((friend, i) => (
+              <div key={friend.uid}>
+                {friend.invited && !friend.accepted && friend.outbound && (
+                  <p>{friend.email} - Invited</p>
+                )}
+                {friend.invited && !friend.accepted && !friend.outbound && (
+                  <div>
+                    <p>{friend.email}</p>
+                    <button
+                      onClick={() => {
+                        firebase.Friends.acceptFriend(friend, keys[i]);
+                        this.updateFriendList();
+                      }}
+                    >
+                      Accept
+                    </button>
+                  </div>
+                )}
+                {friend.invited && friend.accepted && (
+                  <div>
+                    <p>{friend.email} - in round</p>
+                    <span
+                      onClick={() => {
+                        firebase.Friends.removeFriend(friend, keys[i]);
+                        this.updateFriendList();
+                      }}
+                    >
+                      x
+                    </span>
+                  </div>
+                )}
+              </div>
+            ))
+          ) : (
+            <div>
+              <p>Looks like you don't have any friends :(</p>
             </div>
-          ))}
+          )}
           {friendMessage && (
             <Modal toggleModal={() => this.toggleModal} show={showModal}>
               <p>
@@ -137,7 +147,7 @@ class TeaRound extends PureComponent {
               </p>
               <button
                 onClick={() => {
-                  firebase.inviteFriend(email);
+                  firebase.Friends.inviteFriend(email);
                   this.toggleModal(false);
                 }}
               >
@@ -148,7 +158,7 @@ class TeaRound extends PureComponent {
         </div>
         <button
           onClick={() => {
-            firebase.initializeTeaRound(this.state.friends);
+            firebase.Drinks.initializeTeaRound(this.state.friends);
             history.push(`/teaRound?${firebase.auth.currentUser.uid}`);
           }}
         >

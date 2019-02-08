@@ -13,7 +13,7 @@ class Choice extends React.PureComponent {
     this.getDrinks();
   }
   getDrinks = () => {
-    this.props.firebase.getDrinks(this.teaRoundUid).then(res => {
+    this.props.firebase.Drinks.getDrinks(this.teaRoundUid).then(res => {
       let drinks = Object.values(res).map((drink, i) => ({
         ...drink,
         key: Object.keys(res)[i]
@@ -62,7 +62,7 @@ class Choice extends React.PureComponent {
             />
             <button
               onClick={() => {
-                firebase.addDrink(drinkChoice, this.teaRoundUid, notes);
+                firebase.Drinks.addDrink(drinkChoice, this.teaRoundUid, notes);
                 this.getDrinks();
               }}
             >
@@ -95,7 +95,7 @@ class Choice extends React.PureComponent {
               <button
                 onClick={() => {
                   if (updating) {
-                    firebase
+                    firebase.Drinks
                       .updateDrink(
                         this.teaRoundUid,
                         drink.key,
@@ -117,7 +117,7 @@ class Choice extends React.PureComponent {
               )}
               <button
                 onClick={() => {
-                  firebase.removeDrink(this.teaRoundUid, drink.key);
+                  firebase.Drinks.removeDrink(this.teaRoundUid, drink.key);
                   this.getDrinks();
                 }}
               >
@@ -125,6 +125,7 @@ class Choice extends React.PureComponent {
               </button>
             </div>
           ))}
+          <button>All done</button>
         </div>
       </div>
     );

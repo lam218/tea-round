@@ -14,6 +14,9 @@ const NavigationAuth = () => {
     <div className="nav">
       <ul className="nav__list">
         <li className="nav__list-item">
+          <Link to={ROUTES.HOME}>Home</Link>
+        </li>
+        <li className="nav__list-item">
           <Link to={ROUTES.ACCOUNT}>Account</Link>
         </li>
         <li className="nav__list-item">
